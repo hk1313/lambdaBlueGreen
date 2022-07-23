@@ -7,8 +7,8 @@ module "lambda" {
   handler                = "lambda_function.lambda_handler"
   runtime                = "python3.9"
   source_path            = "./src"
-
-  cloudwatch_logs_retention_in_days = var.cloudwatch_logs_retention_in_days 
+  publish = true
+  cloudwatch_logs_retention_in_days = var.cloudwatch_logs_retention_in_days
   
 }
 
