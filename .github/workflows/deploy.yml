@@ -1,0 +1,47 @@
+name: lambda-bluegreen
+    
+on:
+  push:
+  workflow_dispatch:
+      
+jobs:
+    dev:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Check out code
+            uses: actions/checkout@v3
+
+          - name: Setup Terraform
+            uses: hashicorp/setup-terraform@v2
+            with:
+              terraform_version: 1.1.9
+
+          - name: Set up Python 3.9.2
+            uses: actions/setup-python@v4
+            with:
+              python-version: 3.9.2
+              
+          - name: Display Python version
+            run: python --version
+
+          - name: Configure AWS Credentials
+            uses: aws-actions/configure-aws-credentials@v1
+            with:
+              aws-region: us-east-1
+              aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+              aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+          - name: Initialize Terraform
+            id: init          
+            run: |
+              terraform init
+
+          - name: Plan Terraform
+            id: plan
+            run: |
+              terraform plan --var-file=./envs/dev.tfvars -lock=false -input=false
+
+          - name: Apply Terraform
+            id: apply
+            run: |
+              terraform apply --var-file=./envs/dev.tfvars -lock=false --auto-approve            
