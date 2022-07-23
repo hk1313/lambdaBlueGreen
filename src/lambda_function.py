@@ -6,5 +6,3 @@ def lambda_handler(event, context):
 
     if (a < b):
         print('a is less than b..')
-
-    c = 30
