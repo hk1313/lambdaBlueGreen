@@ -4,7 +4,7 @@ module "lambda" {
 
   function_name          = "poc-lambda-bluegreen-${var.env}"
   description            = "Lambda function"
-  handler                = "lambda_function.lambda_handler"
+  handler                = "poc-lambda-bluegreen-${var.env}/lambda_function.lambda_handler"
   runtime                = "python3.9"
   source_path            = "./src"
 
