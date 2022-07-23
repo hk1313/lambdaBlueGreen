@@ -14,7 +14,8 @@ module "lambda" {
 
 module "lambda_alias" {
   source = "terraform-aws-modules/lambda/aws//modules/alias"
-
+  version = "3.3.1"
+  
   depends_on = [module.lambda]
   refresh_alias = true
 
@@ -29,6 +30,7 @@ module "lambda_alias" {
 module "deploy" {
   depends_on = [module.lambda, module.lambda_alias]
   source = "terraform-aws-modules/lambda/aws//modules/deploy"
+  version = "3.3.1"
 
   alias_name    = module.lambda_alias.lambda_alias_name
   function_name = module.lambda.lambda_function_name
