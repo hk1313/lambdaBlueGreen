@@ -8,4 +8,4 @@ def lambda_handler(event, context):
         print('a is less than b..')
 
     c = 30
-    print (c):
+    print (c)::
