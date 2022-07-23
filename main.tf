@@ -18,7 +18,7 @@ module "lambda_alias" {
   depends_on = [module.lambda]
   refresh_alias = true
 
-  name          = "current"
+  name          = "latest"
   function_name = module.lambda.lambda_function_name
 
   # Set function_version when creating alias to be able to deploy using it,
