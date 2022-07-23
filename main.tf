@@ -4,7 +4,7 @@ module "lambda" {
 
   function_name          = "deploy-lambda-bluegreen-poc-${var.env}"
   description            = "Lambda function"
-  handler                = "deploy-lambda-bluegreen-poc-${var.env}/lambda_function.lambda_handler"
+  handler                = "lambda_function.lambda_handler"
   runtime                = "python3.9"
   source_path            = "./src"
 
@@ -18,7 +18,7 @@ module "lambda_alias" {
   depends_on = [module.lambda]
   refresh_alias = true
 
-  name          = "latest"
+  name          = "current"
   function_name = module.lambda.lambda_function_name
 
   # Set function_version when creating alias to be able to deploy using it,
