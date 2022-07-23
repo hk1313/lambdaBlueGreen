@@ -2,7 +2,7 @@ module "lambda" {
   source  = "terraform-aws-modules/lambda/aws"
   version = "3.3.1"
 
-  function_name          = "test-lambda-bluegreen-${var.env}"
+  function_name          = "poc-lambda-bluegreen-${var.env}"
   description            = "Lambda function"
   handler                = "lambda_function.lambda_handler"
   runtime                = "python3.9"
@@ -36,10 +36,10 @@ module "deploy" {
   target_version = module.lambda.lambda_function_version
 
   create_app = true
-  app_name   = "test-codedeploy-app-bluegreen-lambda-${var.env}"
+  app_name   = "poc-codedeploy-app-bluegreen-lambda-${var.env}"
 
   create_deployment_group = true
-  deployment_group_name   = "test-codedeploy-deployment-group-bluegreen-lambda-${var.env}"
+  deployment_group_name   = "poc-codedeploy-deployment-group-bluegreen-lambda-${var.env}"
   deployment_config_name = var.lambda_deployment_type
 
   create_deployment          = true
