@@ -26,7 +26,7 @@ module "lambda_alias" {
   function_version = module.lambda.lambda_function_version
 }
 
-/*
+/*   This block may require for ECS log group to check Error count as Lambda by default give Error count no longer require.
 resource "aws_cloudwatch_log_metric_filter" "metric_filter" {
   name           = "bluegreen-poc-log-filter-${var.env}"
   pattern        = " ?\"ERROR\" ?\"Error\" ?\"error\" ?\"TIMEOUT\" ?\"Timeout\" ?\"timeout\" "
