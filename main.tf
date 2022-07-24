@@ -38,7 +38,7 @@ resource "aws_cloudwatch_log_metric_filter" "metric_filter" {
     value     = "1"
   }
 }
-*/
+
 
 resource "aws_cloudwatch_metric_alarm" "metric_alarm" {
   depends_on = [module.lambda]
@@ -65,8 +65,8 @@ resource "aws_cloudwatch_metric_alarm" "metric_alarm" {
       }
     }
   }
-
 }
+*/
 
 module "deploy" {
   depends_on = [module.lambda, module.lambda_alias]
