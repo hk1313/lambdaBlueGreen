@@ -79,7 +79,7 @@ module "deploy" {
 
   alarm_enabled = true
   alarm_ignore_poll_alarm_failure  = false
-  alarms = ["aws_cloudwatch_metric_alarm.metric_alarm.alarm_name"]
+  alarms = ["bluegreen-poc-${var.env}"]
 
   create_app = true
   app_name   = "bluegreen-lambda-${var.env}"
