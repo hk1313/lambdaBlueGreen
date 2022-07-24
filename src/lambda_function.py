@@ -5,4 +5,4 @@ def lambda_handler(event, context):
     b = 20
 
     if (a < b):
-        print('a is less than b..')
+        print('a is less than b..'):
