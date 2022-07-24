@@ -26,6 +26,7 @@ module "lambda_alias" {
   function_version = module.lambda.lambda_function_version
 }
 
+/*
 resource "aws_cloudwatch_log_metric_filter" "metric_filter" {
   name           = "bluegreen-poc-log-filter-${var.env}"
   pattern        = " ?\"ERROR\" ?\"Error\" ?\"error\" ?\"TIMEOUT\" ?\"Timeout\" ?\"timeout\" "
@@ -37,18 +38,34 @@ resource "aws_cloudwatch_log_metric_filter" "metric_filter" {
     value     = "1"
   }
 }
+*/
 
 resource "aws_cloudwatch_metric_alarm" "metric_alarm" {
+  depends_on = [module.lambda]
+
   alarm_name                = "bluegreen-poc-${var.env}"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "5"
-  metric_name               = "ErrorCount"
-  namespace                 = "lambda_bluegreen_poc"
-  period                    = "300"
-  statistic                 = "Sum"
+  evaluation_periods        = "1"
   threshold                 = "1"
   alarm_description         = "This metric monitors error or timeout keyword "
   insufficient_data_actions = []
+
+  metric_query {
+    id = "e1"
+
+    metric {
+      metric_name = "Errors"
+      namespace   = "AWS/Lambda"
+      period      = "180"
+      stat        = "Sum"
+      unit        = "Count"
+
+      dimensions = {
+        FunctionName = module.lambda.lambda_function_name
+      }
+    }
+  }
+
 }
 
 module "deploy" {
