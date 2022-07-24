@@ -52,7 +52,7 @@ resource "aws_cloudwatch_metric_alarm" "metric_alarm" {
 
   metric_query {
     id = "e1"
-
+    return_data = true
     metric {
       metric_name = "Errors"
       namespace   = "AWS/Lambda"
