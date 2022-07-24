@@ -26,6 +26,31 @@ module "lambda_alias" {
   function_version = module.lambda.lambda_function_version
 }
 
+resource "aws_cloudwatch_log_metric_filter" "metric_filter" {
+  name           = "bluegreen-poc-log-filter-${var.env}"
+  pattern        = " ?\"ERROR\" ?\"Error\" ?\"error\" ?\"TIMEOUT\" ?\"Timeout\" ?\"timeout\" "
+  log_group_name = module.lambda.lambda_cloudwatch_log_group_name
+
+  metric_transformation {
+    name      = "ErrorCount"
+    namespace = "lambda_bluegreen_poc"
+    value     = "1"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "metric_alarm" {
+  alarm_name                = "bluegreen-poc-${var.env}"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "5"
+  metric_name               = "ErrorCount"
+  namespace                 = "lambda_bluegreen_poc"
+  period                    = "300"
+  statistic                 = "Sum"
+  threshold                 = "1"
+  alarm_description         = "This metric monitors error or timeout keyword "
+  insufficient_data_actions = []
+}
+
 module "deploy" {
   depends_on = [module.lambda, module.lambda_alias]
   source = "terraform-aws-modules/lambda/aws//modules/deploy"
@@ -35,6 +60,10 @@ module "deploy" {
   function_name = module.lambda.lambda_function_name
 
   target_version = module.lambda.lambda_function_version
+
+  alarm_enabled = true
+  alarm_ignore_poll_alarm_failure  = false
+  alarms = ["aws_cloudwatch_metric_alarm.metric_alarm.arn"]
 
   create_app = true
   app_name   = "bluegreen-lambda-${var.env}"
